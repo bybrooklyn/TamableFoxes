@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
 
 public class SQLiteHelper {
     public static Plugin plugin;
@@ -25,7 +26,7 @@ public class SQLiteHelper {
         return instance;
     }
 
-    public void createTablesIfNotExist() {
+    public synchronized void createTablesIfNotExist() {
         sqLiteHandler = SQLiteHandler.getInstance();
 
         String userFoxAmountQuery =
@@ -37,55 +38,42 @@ public class SQLiteHelper {
             sqLiteHandler.connect(plugin);
             // Create previous bans table
             DatabaseMetaData dbm = sqLiteHandler.getConnection().getMetaData();
-            ResultSet tables = dbm.getTables(null, null, userAmountTableName, null);
-            if (!tables.next()) {
-                PreparedStatement statement = sqLiteHandler.getConnection().prepareStatement(userFoxAmountQuery);
-                statement.executeUpdate();
+            try (ResultSet tables = dbm.getTables(null, null, userAmountTableName, null)) {
+                if (!tables.next()) {
+                    try (PreparedStatement statement = sqLiteHandler.getConnection().prepareStatement(userFoxAmountQuery)) {
+                        statement.executeUpdate();
+                    }
 
-                plugin.getServer().getConsoleSender().sendMessage(Config.getPrefix() + "Created previous player bans table!");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (sqLiteHandler.getConnection() != null) {
-                try {
-                    sqLiteHandler.getConnection().close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    plugin.getServer().getConsoleSender().sendMessage(Config.getPrefix() + "Created previous player bans table!");
                 }
             }
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to create user fox amount table", e);
         }
     }
 
-    public int getPlayerFoxAmount(UUID uuid) {
+    public synchronized int getPlayerFoxAmount(UUID uuid) {
         sqLiteHandler = SQLiteHandler.getInstance();
 
         try {
             sqLiteHandler.connect(plugin);
-            PreparedStatement statement = sqLiteHandler.getConnection()
-                    .prepareStatement("SELECT * FROM " + userAmountTableName + " WHERE UUID=?");
-            statement.setString(1, uuid.toString());
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                return results.getInt("AMOUNT");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (sqLiteHandler.getConnection() != null) {
-                try {
-                    sqLiteHandler.getConnection().close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+            try (PreparedStatement statement = sqLiteHandler.getConnection()
+                    .prepareStatement("SELECT * FROM " + userAmountTableName + " WHERE UUID=?")) {
+                statement.setString(1, uuid.toString());
+                try (ResultSet results = statement.executeQuery()) {
+                    if (results.next()) {
+                        return results.getInt("AMOUNT");
+                    }
                 }
             }
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to read fox amount for " + uuid, e);
         }
 
         return -1;
     }
 
-    public void addPlayerFoxAmount(UUID uuid, int amt) {
+    public synchronized void addPlayerFoxAmount(UUID uuid, int amt) {
         sqLiteHandler = SQLiteHandler.getInstance();
 
         try {
@@ -95,42 +83,26 @@ public class SQLiteHelper {
             }
 
             sqLiteHandler.connect(plugin);
-            PreparedStatement statement = sqLiteHandler.getConnection().prepareStatement(query);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (sqLiteHandler.getConnection() != null) {
-                try {
-                    sqLiteHandler.getConnection().close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            try (PreparedStatement statement = sqLiteHandler.getConnection().prepareStatement(query)) {
+                statement.executeUpdate();
             }
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to add fox amount for " + uuid, e);
         }
     }
 
-    public void removePlayerFoxAmount(UUID uuid, int amt) {
+    public synchronized void removePlayerFoxAmount(UUID uuid, int amt) {
         sqLiteHandler = SQLiteHandler.getInstance();
 
         try {
             String query = "UPDATE " + userAmountTableName + " SET AMOUNT = AMOUNT - " + amt + " WHERE UUID = '" + uuid.toString() + "'";
 
             sqLiteHandler.connect(plugin);
-            PreparedStatement statement = sqLiteHandler.getConnection().prepareStatement(query);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (sqLiteHandler.getConnection() != null) {
-                try {
-                    sqLiteHandler.getConnection().close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            try (PreparedStatement statement = sqLiteHandler.getConnection().prepareStatement(query)) {
+                statement.executeUpdate();
             }
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to remove fox amount for " + uuid, e);
         }
     }
 }

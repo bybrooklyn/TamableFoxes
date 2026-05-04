@@ -3,6 +3,7 @@ package net.seanomik.tamablefoxes;
 import net.seanomik.tamablefoxes.util.NMSInterface;
 import net.seanomik.tamablefoxes.util.Utils;
 import net.seanomik.tamablefoxes.util.io.Config;
+import net.seanomik.tamablefoxes.util.io.sqlite.SQLiteHandler;
 import net.seanomik.tamablefoxes.util.io.sqlite.SQLiteHelper;
 import net.seanomik.tamablefoxes.versions.version_1_14_R1.NMSInterface_1_14_R1;
 import net.seanomik.tamablefoxes.versions.version_1_15_R1.NMSInterface_1_15_R1;
@@ -45,14 +46,10 @@ public final class TamableFoxes extends JavaPlugin implements Listener {
     public NMSInterface nmsInterface;
     private PlayerInteractEntityEventListener playerInteractEntityEventListener;
 
-    private boolean equalOrBetween(double num, double min, double max) {
-        return num >= min && num <= max;
-    }
-
     @Override
     public void onLoad() {
         plugin = this;
-        Utils.tamableFoxesPlugin = this;
+        Utils.setTamableFoxesPlugin(this);
 
         Config.setConfig(this.getConfig());
         LanguageConfig.getConfig(this).saveDefault();
@@ -147,14 +144,13 @@ public final class TamableFoxes extends JavaPlugin implements Listener {
 
         try {
             if (!outFile.exists() || replace) {
-                OutputStream out = new FileOutputStream(outFile);
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
+                try (InputStream inputStream = in; OutputStream out = new FileOutputStream(outFile)) {
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = inputStream.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
                 }
-                out.close();
-                in.close();
             }
             // Ignore could not save because it already exists.
             /* else {
@@ -168,6 +164,7 @@ public final class TamableFoxes extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         getServer().getConsoleSender().sendMessage(Config.getPrefix() + ChatColor.YELLOW + LanguageConfig.getSavingFoxMessage());
+        SQLiteHandler.getInstance().closeConnection();
     }
 
     public static TamableFoxes getPlugin() {
