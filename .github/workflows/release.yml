@@ -1,11 +1,10 @@
-# Builds the shaded plugin jar and attaches it to a GitHub Release when a
-# version tag (e.g. v2.3.2-FOX) is pushed. Same build flow as build.yml.
+# Builds the shaded plugin jar and publishes a GitHub Release named
+# tamablefoxs<YYYYMMDD>, with the jar attached. Run it manually from the
+# Actions tab (workflow_dispatch). Same build flow as build.yml.
 
 name: Release
 
 on:
-  push:
-    tags: [ 'v*' ]
   workflow_dispatch:
 
 permissions:
@@ -16,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Compute release name
+        id: meta
+        run: echo "name=tamablefoxs$(date -u +%Y%m%d)" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK 25
         uses: actions/setup-java@v4
@@ -49,5 +52,11 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.meta.outputs.name }}
+          name: ${{ steps.meta.outputs.name }}
           files: Plugin/target/TamableFoxes-v*.jar
           generate_release_notes: true
+          body: |
+            Tamable Foxes for **Paper** — Minecraft **26.1.2** (Mojang-mapped).
+
+            Drop the attached jar into your Paper server's `plugins/` folder and restart (Java 25+).
