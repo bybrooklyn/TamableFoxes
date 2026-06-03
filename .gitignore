@@ -15,3 +15,18 @@
 #*.dmg
 
 run/
+
+# Local Maven distribution fetched for building (no system Maven installed)
+.tools/
+
+# Gradle build output for the paperweight (26_1_R1) module
+26_1_R1/build/
+26_1_R1/.gradle/
+.gradle/
+
+# IDE/editor compiled output
+**/bin/
+
+# Local-only reference material for porting (not plugin source)
+Paper-main/
+server.jar

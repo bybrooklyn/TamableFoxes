@@ -5,37 +5,14 @@ import net.seanomik.tamablefoxes.util.Utils;
 import net.seanomik.tamablefoxes.util.io.Config;
 import net.seanomik.tamablefoxes.util.io.sqlite.SQLiteHandler;
 import net.seanomik.tamablefoxes.util.io.sqlite.SQLiteHelper;
-import net.seanomik.tamablefoxes.versions.version_1_14_R1.NMSInterface_1_14_R1;
-import net.seanomik.tamablefoxes.versions.version_1_15_R1.NMSInterface_1_15_R1;
-import net.seanomik.tamablefoxes.versions.version_1_16_R1.NMSInterface_1_16_R1;
-import net.seanomik.tamablefoxes.versions.version_1_16_R2.NMSInterface_1_16_R2;
-import net.seanomik.tamablefoxes.versions.version_1_16_R3.NMSInterface_1_16_R3;
-import net.seanomik.tamablefoxes.versions.version_1_17_R1.NMSInterface_1_17_R1;
-import net.seanomik.tamablefoxes.versions.version_1_17_1_R1.NMSInterface_1_17_1_R1;
 import net.seanomik.tamablefoxes.util.io.LanguageConfig;
-
-import net.seanomik.tamablefoxes.versions.version_1_18_1_R1.NMSInterface_1_18_1_R1;
-import net.seanomik.tamablefoxes.versions.version_1_18_R1.NMSInterface_1_18_R1;
-import net.seanomik.tamablefoxes.versions.version_1_18_R2.NMSInterface_1_18_R2;
-import net.seanomik.tamablefoxes.versions.version_1_19_R1.NMSInterface_1_19_R1;
-import net.seanomik.tamablefoxes.versions.version_1_19_1_R1.NMSInterface_1_19_1_R1;
-import net.seanomik.tamablefoxes.versions.version_1_19_2_R1.NMSInterface_1_19_2_R1;
-import net.seanomik.tamablefoxes.versions.version_1_19_3_R1.NMSInterface_1_19_3_R1;
-import net.seanomik.tamablefoxes.versions.version_1_19_R3.NMSInterface_1_19_4_R1;
-import net.seanomik.tamablefoxes.versions.version_1_20_R1.NMSInterface_1_20_R1;
-import net.seanomik.tamablefoxes.versions.version_1_20_R3.NMSInterface_1_20_R3;
-import net.seanomik.tamablefoxes.versions.version_1_21_10_R1.NMSInterface_1_21_10_R1;
-import net.seanomik.tamablefoxes.versions.version_1_21_11_R1.NMSInterface_1_21_11_R1;
-import net.seanomik.tamablefoxes.versions.version_1_21_R1.NMSInterface_1_21_R1;
+import net.seanomik.tamablefoxes.versions.version_26_1_R1.NMSInterface_26_1_R1;
 import org.bukkit.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.util.logging.Level;
-import net.seanomik.tamablefoxes.versions.version_1_21_4_R1.NMSInterface_1_21_4_R1;
-import net.seanomik.tamablefoxes.versions.version_1_21_5_R1.NMSInterface_1_21_5_R1;
-import net.seanomik.tamablefoxes.versions.version_1_21_8_R1.NMSInterface_1_21_8_R1;
 
 public final class TamableFoxes extends JavaPlugin implements Listener {
     private static TamableFoxes plugin;
@@ -57,29 +34,7 @@ public final class TamableFoxes extends JavaPlugin implements Listener {
         // Verify server version
         // FOX
         switch (Bukkit.getMinecraftVersion()) {
-            case "1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4" -> nmsInterface = new NMSInterface_1_14_R1();
-            case "1.15", "1.15.1", "1.15.2" -> nmsInterface = new NMSInterface_1_15_R1();
-            case "1.16" -> nmsInterface = new NMSInterface_1_16_R1();
-            case "1.16.2", "1.16.3" -> nmsInterface = new NMSInterface_1_16_R2();
-            case "1.16.4", "1.16.5" -> nmsInterface = new NMSInterface_1_16_R3();
-            case "1.17" -> nmsInterface = new NMSInterface_1_17_R1();
-            case "1.17.1" -> nmsInterface = new NMSInterface_1_17_1_R1();
-            case "1.18" -> nmsInterface = new NMSInterface_1_18_R1();
-            case "1.18.1" -> nmsInterface = new NMSInterface_1_18_1_R1();
-            case "1.18.2" -> nmsInterface = new NMSInterface_1_18_R2();
-            case "1.19" -> nmsInterface = new NMSInterface_1_19_R1();
-            case "1.19.1" -> nmsInterface = new NMSInterface_1_19_1_R1();
-            case "1.19.2" -> nmsInterface = new NMSInterface_1_19_2_R1();
-            case "1.19.3" -> nmsInterface = new NMSInterface_1_19_3_R1();
-            case "1.19.4" -> nmsInterface = new NMSInterface_1_19_4_R1();
-            case "1.20", "1.20.1" -> nmsInterface = new NMSInterface_1_20_R1();
-            case "1.20.3", "1.20.4" -> nmsInterface = new NMSInterface_1_20_R3();
-            case "1.21", "1.21.1" -> nmsInterface = new NMSInterface_1_21_R1(); // FOX
-            case "1.21.4" -> nmsInterface = new NMSInterface_1_21_4_R1();
-            case "1.21.5" -> nmsInterface = new NMSInterface_1_21_5_R1();
-            case "1.21.8" -> nmsInterface = new NMSInterface_1_21_8_R1();
-            case "1.21.9", "1.21.10" -> nmsInterface = new NMSInterface_1_21_10_R1();
-            case "1.21.11" -> nmsInterface = new NMSInterface_1_21_11_R1();
+            case "26.1.2" -> nmsInterface = new NMSInterface_26_1_R1(); // FOX
 
             default -> {
                 Bukkit.getServer().getConsoleSender().sendMessage(Config.getPrefix() + ChatColor.RED + LanguageConfig.getUnsupportedMCVersionRegister());

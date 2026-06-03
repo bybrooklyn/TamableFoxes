@@ -12,36 +12,11 @@
     <modules>
         <module>Plugin</module>
         <module>Utility</module>
-
-        <module>1_20_R3</module>
-        <module>1_20_R1</module>
-
-        <module>1_19_R3</module>
-        <module>1_19_3_R1</module>
-        <module>1_19_2_R1</module>
-        <module>1_19_1_R1</module>
-        <module>1_19_R1</module>
-
-        <module>1_18_R2</module>
-        <module>1_18_1_R1</module>
-        <module>1_18_R1</module>
-
-        <module>1_17_1_R1</module>
-        <module>1_17_R1</module>
-
-        <module>1_16_R3</module>
-        <module>1_16_R2</module>
-        <module>1_16_R1</module>
-
-        <module>1_15_R1</module>
-        <module>1_14_R1</module>
-
-        <module>1_21_R1</module>
-        <module>1_21_R3</module>
-        <module>1_21_R4</module>
-        <module>1_21_R7</module>
-        <module>1_21_R9</module>
-        <module>1_21_R10</module>
+        <!--
+          MC 26.1.2 NMS support lives in the `26_1_R1/` module, which is built with Gradle +
+          paperweight-userdev (Mojang-mapped) and published to the local Maven repo as
+          net.seanomik:tamablefoxes_v26_1_R1. It is intentionally NOT a Maven reactor module.
+        -->
     </modules>
 
     <properties>
@@ -56,9 +31,9 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.1</version>
                     <configuration>
-                        <!-- FOX: Java 8 -> Java 21 -->
-                        <source>21</source>
-                        <target>21</target>
+                        <!-- FOX: Java 8 -> Java 21 -> Java 25 (MC 26.1.2 requires Java 25) -->
+                        <source>25</source>
+                        <target>25</target>
                         <compilerArgs>
                             <arg>-parameters</arg>
                         </compilerArgs>

@@ -1,14 +1,4 @@
-<h1 align="center">Tamable Foxes</h1>
-<p align="center">
-SpigotMC Plugin that gives you the ability to tame foxes!
-</p>
-
-### WARNING: Do not reload the plugin, you may loose foxes!!
-
-### Default configuration files:
-* <a href="https://github.com/SeanOMik/TamableFoxes/blob/master/Plugin/src/main/resources/config.yml">config.yml</a>
-* <a href="https://github.com/SeanOMik/TamableFoxes/blob/master/Plugin/src/main/resources/language.yml">language.yml</a>
-<br>
+Fox plugin thing for paper, AI ported this to paper in about 30 minutes :3
 
 If you get any errors, <a href="https://github.com/SeanOMik/TamableFoxes/issues/new">create an issue!</a><br><br>
 
@@ -54,18 +44,3 @@ Have you ever wanted to tame foxes? Well, now you can! <b>Use chicken to tame</b
 * `tamablefoxes.givefox.give.others`: Allows the player to give another players fox to a player with /givefox. This will ignore if the other receiving has the `tamablefoxes.givefox.receive` permission. Default: `op`
 * `tamablefoxes.givefox.give`: Gives the player the ability to give foxes to other players with /givefox. Default: `Everybody`
 * `tamablefoxes.givefox.receive`: Gives the player the ability to receive foxes from other players from /givefox. Default: `Everybody`
-
-<br>
-
-![foxes sleeping](Screenshots/foxes-sleeping-with-player.png)
-![foxes sitting player holding sword](Screenshots/foxes-sitting-sword.png)
-![foxes with baby looking at player](Screenshots/foxes-baby-looking-at-player.png)
-![giving fox totem](Screenshots/giving-fox-item.gif)
-![fox leaping towards chicken](Screenshots/fox-pouncing.gif)
-
-## Building
-To build you must have every version of spigot starting from 1.14 built and inside your maven cache. To do that, look at [compileSpigotVersions.sh](compileSpigotVersions.sh) that lists all the java commands and the java versions for them.
-
-## Metrics collection
-![metrics](https://bstats.org/signatures/bukkit/TamableFoxes.svg)
-Tamable Foxes collects anonymous server statistics through bStats, an open-source statistics service for Minecraft software. If you wish to opt-out, you can do so in the `bstats/config.yml` file.

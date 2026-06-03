@@ -1,0 +1,56 @@
+# Builds the MC 26.1.2 / Paper (Mojang-mapped) plugin.
+#
+# The 26.1.2 NMS module (26_1_R1) is built with Gradle + paperweight-userdev and
+# published to the local Maven repo, then the Maven Plugin module shades it.
+# Build order: install Utility -> gradle publishToMavenLocal -> package Plugin.
+
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Cache Gradle & paperweight
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            26_1_R1/.gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('26_1_R1/**/*.gradle*', '26_1_R1/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - name: Install parent POM + Utility to local repo
+        run: |
+          mvn -B -N install
+          mvn -B -pl Utility install
+
+      - name: Build Mojang-mapped 26.1.2 NMS module (paperweight)
+        working-directory: 26_1_R1
+        run: ./gradlew --no-daemon publishToMavenLocal
+
+      - name: Package shaded plugin jar
+        run: mvn -B -pl Plugin package
+
+      - name: Upload plugin jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: TamableFoxes
+          path: Plugin/target/TamableFoxes-v*.jar
+          if-no-files-found: error

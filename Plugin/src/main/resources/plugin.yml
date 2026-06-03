@@ -1,7 +1,7 @@
 name: Tamablefoxes
 version: ${project.version}
 main: net.seanomik.tamablefoxes.TamableFoxes
-api-version: 1.14
+api-version: 26.1.2
 load: STARTUP
 description: Adds tamable foxes to Minecraft!
 
